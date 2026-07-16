@@ -34,7 +34,7 @@ public class ExceptionHandlingMiddleware
                 (new {Message = ex.Message, Type = ex.GetType().ToString()});
         }
 
-        await _next(httpContext);
+        //await _next(httpContext);
         }
 }
 

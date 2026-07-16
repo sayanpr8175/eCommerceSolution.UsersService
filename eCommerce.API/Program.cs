@@ -25,13 +25,42 @@ builder.Services.AddAutoMapper(typeof(RegisterRequestMappingProfile).Assembly);
 
 builder.Services.AddFluentValidationAutoValidation();
 
+// Add api endpoint explorer - swagger
+
+builder.Services.AddEndpointsApiExplorer();
+
+//Add swagger generation
+builder.Services.AddSwaggerGen();
+
+// Add cors related services
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+
+});
+
+
 var app = builder.Build();
 
 app.UseExceptionHandlingMiddleware();
 
 // Routing
-
 app.UseRouting();
+
+// Adding endpoints to swagger.json file.
+
+app.UseSwagger();
+
+app.UseSwaggerUI();
+
+app.UseCors();
+
 
 // Authentication
 
