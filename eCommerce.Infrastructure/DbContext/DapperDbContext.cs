@@ -1,5 +1,4 @@
 ﻿
-
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Data;
@@ -13,8 +12,15 @@ public class DapperDbContext
     public DapperDbContext(IConfiguration configuration)
     {
         _configuration = configuration;
-        string? connectionString = 
-            _configuration.GetConnectionString("PostgresConnection");
+
+        string connectionStringTemplate = 
+            _configuration.GetConnectionString("PostgresConnection")!;
+
+        // it will get the variables from docker env
+
+        string connectionString = connectionStringTemplate.Replace("$POSTGRES_HOST", Environment.GetEnvironmentVariable("POSTGRES_HOST"))
+            .Replace("$POSTGRES_PASSWORD", Environment.GetEnvironmentVariable("POSTGRES_PASSWORD"));
+
 
         // Create a new npg connection
 
