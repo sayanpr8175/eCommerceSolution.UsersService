@@ -4,21 +4,33 @@ using eCommerce.Core.DTO;
 using eCommerce.Core.Entities;
 using eCommerce.Core.RepositoryContracts;
 using eCommerce.Core.ServiceContracts;
+using Microsoft.Graph;
 
 namespace eCommerce.Core.Services;
 internal class UsersService : IUsersService
 {
     private readonly IUsersRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly GraphServiceClient _graphServiceClient;
 
-    public UsersService(IUsersRepository usersRepository, IMapper mapper)
+    public UsersService(IUsersRepository usersRepository,
+        IMapper mapper, GraphServiceClient graphServiceClient)
     {
+        _graphServiceClient = graphServiceClient;
         _userRepository = usersRepository;
         _mapper = mapper;
     }
 
     public async Task<UserDTO> GetUserByUserID(Guid userID)
     {
+
+        //var existingUser = await _graphServiceClient.Users[Convert.ToString(userID)].GetAsync();
+
+        //var userDTOObj = new UserDTO(userID,
+        //    existingUser.UserPrincipalName,
+        //    existingUser.GivenName,
+        //    existingUser.Surname);
+
         ApplicationUser? user = await _userRepository.GetUserByUserID(userID);
 
         return _mapper.Map<UserDTO>(user);

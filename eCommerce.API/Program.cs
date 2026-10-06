@@ -7,10 +7,12 @@ using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.WebHost.UseUrls("http://0.0.0.0:9090");
+
 // Add infrastructure services
 
 builder.Services.AddInfrastructure();
-builder.Services.AddCore();
+builder.Services.AddCore(builder.Configuration);
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -48,7 +50,10 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseExceptionHandlingMiddleware();
+if(!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandlingMiddleware();
+}
 
 // Routing
 app.UseRouting();
